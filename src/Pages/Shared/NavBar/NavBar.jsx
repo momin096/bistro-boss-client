@@ -1,7 +1,22 @@
-import { FaShoppingCart, FaUserCircle } from "react-icons/fa";
+import { FaOpencart, FaRegUserCircle, FaShoppingCart, FaUserCircle } from "react-icons/fa";
 import { Link, NavLink } from "react-router-dom";
+import useAuth from "../../../hooks/useAuth";
+import toast from "react-hot-toast";
 
 const NavBar = () => {
+  const { user, logOut } = useAuth();
+
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {
+        toast.success('Logout successful!');
+      })
+      .catch((error) => {
+        // An error happened.
+        toast.error('Logout failed!', error.message);
+      });
+  }
+
   const navLinks = (
     <>
       <li>
@@ -9,15 +24,16 @@ const NavBar = () => {
           HOME
         </NavLink>
       </li>
-      <li><NavLink to="/contact">CONTACT US</NavLink></li>
-      <li><NavLink to="/dashboard">DASHBOARD</NavLink></li>
-      <li><NavLink to="/menu">OUR MENU</NavLink></li>
-      <li><NavLink to="/shop">OUR SHOP</NavLink></li>
+      <li><NavLink to="/contact" style={({ isActive }) => ({ color: isActive ? 'yellow' : 'white' })}>CONTACT US</NavLink></li>
+      <li><NavLink to="/dashboard" style={({ isActive }) => ({ color: isActive ? 'yellow' : 'white' })}>DASHBOARD</NavLink></li>
+      <li><NavLink to="/menu" style={({ isActive }) => ({ color: isActive ? 'yellow' : 'white' })}>OUR MENU</NavLink></li>
+      <li><NavLink to="/order/salad" style={({ isActive }) => ({ color: isActive ? 'yellow' : 'white' })}>ORDER FOOD</NavLink></li>
+      <li><NavLink to="/secret" style={({ isActive }) => ({ color: isActive ? 'yellow' : 'white' })}>SECRET</NavLink></li>
     </>
   );
 
   return (
-    <div className="navbar fixed z-10 bg-black/60 text-white px-4 max-w-[1300px] mx-auto backdrop-blur-2xl">
+    <div className="navbar fixed z-10 bg-black/60 text-white px-4 max-w-[1300px] mx-auto backdrop-blur-xs">
       {/* Logo */}
       <div className="flex-1">
         <Link to="/" className="text-xl font-extrabold leading-4">
@@ -47,12 +63,28 @@ const NavBar = () => {
 
       {/* Right Section */}
       <div className="flex items-center gap-4">
-        <div className="indicator">
-          <span className="indicator-item badge badge-error badge-sm">1</span>
-          <button className="text-xl"><FaShoppingCart /></button>
+        <div className="indicator mx-3">
+          <span className="indicator-item badge bg-red-500/80 border-none badge-sm text-white font-bold ">3</span>
+          <button className="text-2xl "><FaShoppingCart /></button>
         </div>
-        <button className="font-bold">SIGN OUT</button>
-        <button className="text-2xl"><FaUserCircle /></button>
+        {user ? (
+
+          <button onClick={handleLogOut} className="font-bold border px-2 py-1 cursor-pointer">Logout</button>
+
+        ) : (
+          <Link to="/login" className="font-bold">Login</Link>
+
+        )}
+        {/* User Icon */}
+        {
+          user ? (
+            <div className="tooltip tooltip-bottom" data-tip={user.displayName}>
+              <img src={user.photoURL} alt="" className="w-10 h-10 rounded-full object-cover" />
+            </div>
+          ) : (
+            <Link className="text-2xl"><FaRegUserCircle /></Link>
+          )
+        }
       </div>
     </div>
   );
