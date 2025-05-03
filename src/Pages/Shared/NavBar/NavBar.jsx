@@ -2,9 +2,21 @@ import { FaOpencart, FaRegUserCircle, FaShoppingCart, FaUserCircle } from "react
 import { Link, NavLink } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import useCart from "../../../hooks/useCart";
 
 const NavBar = () => {
   const { user, logOut } = useAuth();
+
+
+  const [cart] = useCart();
+
+
+  // useEffect(() => {
+    
+
+  // }, [])
 
   const handleLogOut = () => {
     logOut()
@@ -63,10 +75,10 @@ const NavBar = () => {
 
       {/* Right Section */}
       <div className="flex items-center gap-4">
-        <div className="indicator mx-3">
-          <span className="indicator-item badge bg-red-500/80 border-none badge-sm text-white font-bold ">3</span>
+        <Link to={'/dashboard/cart'} className="indicator mx-3">
+          <span className="indicator-item badge bg-red-500/80 border-none badge-sm text-white font-bold ">{cart.length}</span>
           <button className="text-2xl "><FaShoppingCart /></button>
-        </div>
+        </Link>
         {user ? (
 
           <button onClick={handleLogOut} className="font-bold border px-2 py-1 cursor-pointer">Logout</button>

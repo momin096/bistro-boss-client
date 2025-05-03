@@ -11,15 +11,24 @@ import { Toaster } from 'react-hot-toast';
   reverseOrder={false}
 />
 
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthProvider>
-      <HelmetProvider>
-        <div className='max-w-[1300px] mx-auto'>
-          <RouterProvider router={router} />
-          <Toaster />
-        </div>
-      </HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <HelmetProvider>
+          <div className='max-w-[1300px] mx-auto'>
+            <RouterProvider router={router} />
+            <Toaster />
+          </div>
+        </HelmetProvider>
+      </QueryClientProvider>
     </AuthProvider>
   </StrictMode>,
 )

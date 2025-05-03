@@ -1,11 +1,64 @@
 import React from 'react';
+import useAuth from '../../hooks/useAuth';
+import Swal from 'sweetalert2';
+import { useLocation, useNavigate } from 'react-router-dom';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
+import toast from 'react-hot-toast';
+import useCart from '../../hooks/useCart';
 
 const FoodCard = ({ item }) => {
     const { _id, image, price, recipe, name } = item || {};
 
-    const handleAddToCart = (food) => {
-        // Handle adding the item to the cart here
-        console.log(`Adding ${food.name} to cart ${food._id}`);
+    const { user } = useAuth();
+    const [, refetch] = useCart();
+
+    const axiosSecure = useAxiosSecure();
+
+    const location = useLocation();
+
+    const navigate = useNavigate();
+
+    const handleAddToCart = () => {
+        if (user && user.email) {
+            // send data to the server
+            const cartItem = {
+                foodId: _id,
+                name,
+                image,
+                price,
+                email: user.email
+            };
+
+            axiosSecure.post('/carts', cartItem)
+                .then(res => {
+                    console.log(res.data);
+                    if (res.data.insertedId) {
+                        toast.success(`${name} added to cart successfully!`);
+                        refetch(); // Refetch the cart data after adding an item
+                    }
+
+                })
+                .catch(error => {
+                    console.error('Error adding item to cart:', error);
+                });
+
+        } else {
+            Swal.fire({
+                title: "Your are not logged in",
+                text: "Please login to add items to the cart",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Login",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate("/login", { state: { from: location } });
+                }
+            });
+        }
+
+
     }
 
 
@@ -24,7 +77,7 @@ const FoodCard = ({ item }) => {
 
                 <div className="card-actions">
                     <button
-                        onClick={() => handleAddToCart(item)}
+                        onClick={handleAddToCart}
                         className="btn btn-neutral text-black rounded-xl hover:text-white  border-orange-400 hover:border-black border-0 border-b-4 btn-outline">Add To Cart</button>
                 </div>
             </div>
