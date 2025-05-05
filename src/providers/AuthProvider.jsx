@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import app from "../firebase/firebase.config";
 import { GoogleAuthProvider } from "firebase/auth";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 export const AuthContext = createContext(null);
 
@@ -12,6 +13,7 @@ const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     // const [error, setError] = useState(null);
     const googleProvider = new GoogleAuthProvider();
+    const axiosPublic = useAxiosPublic();
 
     const createUser = (email, password) => {
         setLoading(true);
@@ -45,10 +47,28 @@ const AuthProvider = ({ children }) => {
             setUser(currentUser);
             console.log(currentUser);
             setLoading(false);
+            if (currentUser) {
+                // get token and store in local storage
+                axiosPublic.post('/jwt', { email: currentUser.email })
+                    .then(res => {
+                        console.log('token -> ', res.data.token);
+                        if (res.data.token) {
+                            localStorage.setItem('access-token', res.data.token);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching token:', error);
+
+                    });
+
+            } else {
+                // remove token from local storage
+                localStorage.removeItem('access-token');
+            }
         });
 
         return () => unsubscribe();
-    }, []);
+    }, [axiosPublic]);
 
     const authInfo = {
         user,

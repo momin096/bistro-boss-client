@@ -1,18 +1,17 @@
-import React, { useState } from "react";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { useForm } from "react-hook-form"
 import { Helmet } from "react-helmet-async";
 import toast from "react-hot-toast";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import SocialLogin from "../Shared/SocialLogin/SocialLogin";
 
 
 const Register = () => {
-    // const captchaRef = useRef(null);
-    const [disabled, setDisabled] = useState(true);
-
-    const { createUser, updateUserProfile, loginWithGoogle } = useAuth();
-
+    const { createUser, updateUserProfile } = useAuth();
+    const axiosPublic = useAxiosPublic();
+    const navigate = useNavigate()
     const {
         register,
         handleSubmit,
@@ -20,7 +19,7 @@ const Register = () => {
     } = useForm()
     const onSubmit = (data) => {
         console.log(data);
-        const { name, email, password } = data;
+        const { name, email, password } = data || {};
         createUser(email, password)
             .then(result => {
                 const loggedUser = result.user;
@@ -28,8 +27,20 @@ const Register = () => {
                 toast.success('Registration successful!');
                 updateUserProfile(name, data.photoURL)
                     .then(() => {
-                        toast.success('User profile updated successfully!');
-                        <Navigate to={'/'}></Navigate>
+                        // create user in database
+                        axiosPublic.post('/users', { name, email })
+                            .then(res => {
+                                if (res.data.insertedId) {
+                                    toast.success('User profile created successfully!');
+                                    navigate('/');
+                                }
+                            })
+                            .catch(error => {
+                                console.log(error.message);
+                                toast.error('Failed to create user profile!');
+                            })
+
+
                     })
                     .catch((error) => {
                         toast.error('Failed to update user profile!', error.message);
@@ -43,51 +54,10 @@ const Register = () => {
     }
 
 
-    const handleGoogleSignIn = () => {
-        loginWithGoogle()
-            .then(result => {
-                const loggedUser = result.user;
-                console.log(loggedUser);
-                toast.success('Login successful!');
-            })
-            .catch(error => {
-                console.log(error.message);
-                toast.error(error.message);
-            })
-    }
 
 
 
 
-    // const handleLogin = (e) => {
-    //     e.preventDefault();
-
-    //     const form = e.target;
-    //     const email = form.email.value;
-    //     const password = form.password.value;
-    //     const name = form.name.value;
-
-    //     createUser(email, password)
-    //         .then(result => {
-    //             const loggedUser = result.user;
-    //             console.log(loggedUser);
-    //             // Add additional logic here, like saving user info to the database
-    //         })
-    //         .catch(error => {
-    //             console.log(error.message);
-    //         });
-    // }
-
-    // const handleValidateCaptcha = () => {
-    //     const user_captcha_value = captchaRef.current.value;
-    //     if (validateCaptcha(user_captcha_value) === true) {
-    //         setDisabled(false);
-    //     }
-    //     else {
-    //         setDisabled(true);
-    //     }
-
-    // }
 
     return (<>
         <Helmet>
@@ -171,14 +141,7 @@ const Register = () => {
 
                     {/* Social Login */}
                     <div className="flex justify-center gap-4">
-                        <button className="border-2 border-gray-300 rounded-full p-2 hover:bg-gray-200 transition duration-200">
-
-                            <FaFacebook className="text-2xl" />
-                        </button>
-                        <button onClick={handleGoogleSignIn} className="border-2 border-gray-300 rounded-full p-2 hover:bg-gray-200 transition duration-200">
-                            <FaGoogle className="text-2xl" />
-                        </button>
-
+                        <SocialLogin />
                     </div>
                 </div>
 

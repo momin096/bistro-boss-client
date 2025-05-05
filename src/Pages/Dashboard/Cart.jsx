@@ -82,7 +82,7 @@ const Cart = () => {
                         </thead>
                         <tbody>
                             {cart.map((item, index) => (
-                                <tr key={item.id} className="border-b">
+                                <tr key={item._id} className="border-b">
                                     <td>{index + 1}</td>
                                     <td>
                                         <div className="w-12 h-12 bg-gray-300 rounded" >

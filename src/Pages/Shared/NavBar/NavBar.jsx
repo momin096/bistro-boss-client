@@ -14,7 +14,7 @@ const NavBar = () => {
 
 
   // useEffect(() => {
-    
+
 
   // }, [])
 
@@ -91,7 +91,7 @@ const NavBar = () => {
         {
           user ? (
             <div className="tooltip tooltip-bottom" data-tip={user.displayName}>
-              <img src={user.photoURL} alt="" className="w-10 h-10 rounded-full object-cover" />
+              <img referrerPolicy='no-referrer' src={user.photoURL} alt="" className="w-10 h-10 rounded-full object-cover" />
             </div>
           ) : (
             <Link className="text-2xl"><FaRegUserCircle /></Link>
