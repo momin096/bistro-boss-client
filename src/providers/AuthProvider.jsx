@@ -58,7 +58,6 @@ const AuthProvider = ({ children }) => {
                     })
                     .catch(error => {
                         console.error('Error fetching token:', error);
-
                     });
 
             } else {

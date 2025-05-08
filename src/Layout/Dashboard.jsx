@@ -11,14 +11,14 @@ import useCart from "../hooks/useCart";
 import { ImSpoonKnife } from "react-icons/im";
 import { CgMenuGridO } from "react-icons/cg";
 import { FaBook } from "react-icons/fa6";
-import useAdmin from "../hooks/useAdmin";
-
+import useAdmin from '../hooks/useAdmin'
 
 
 
 const Dashboard = () => {
     const [cart] = useCart();
     const [isAdmin] = useAdmin();
+    console.log('admin', isAdmin);
     return (
         <div className="flex gap-4  min-h-screen">
             <div className="w-64 max-h-full bg-yellow-600/75">

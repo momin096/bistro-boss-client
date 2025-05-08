@@ -103,15 +103,15 @@ const AllUsers = () => {
                         </thead>
                         <tbody>
                             {users.map((user, index) => (
-                                <tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
+                                <tr key={user._id} className="border-b border-gray-200 hover:bg-gray-100">
                                     <td className="px-4 py-2">{index + 1}</td>
-                                    <td className="px-4 py-2">{user.name}</td>
+                                    <td className="px-4 py-2">{user.name || 'Unnamed User'}</td>
                                     <td className="px-4 py-2">{user.email}</td>
                                     <td className="px-4 py-2">
                                         {
                                             user.role === 'admin' ? 'Admin' : <span
                                                 onClick={() => handleMakeAdmin(user)}
-                                                className="bg-amber-400 text-white px-2 py-2 textxl rounded inline-flex items-center">
+                                                className="bg-amber-400 text-white px-2 py-2 text-xl rounded inline-flex items-center">
                                                 <FaUsers />
                                             </span>
                                         }

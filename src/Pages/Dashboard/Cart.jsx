@@ -3,11 +3,13 @@ import useCart from "../../hooks/useCart";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
 
 
     const [cart, refetch] = useCart();
+
     const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
 
     const axiosSecure = useAxiosSecure();
@@ -33,11 +35,6 @@ const Cart = () => {
                     .then(res => {
                         if (res.data.deletedCount > 0) {
                             toast.success(`${name} deleted successfully`);
-                            Swal.fire({
-                                title: "Deleted!",
-                                text: "Your file has been deleted.",
-                                icon: "success"
-                            });
                             refetch();
                         }
                     })
@@ -63,9 +60,12 @@ const Cart = () => {
                     <div className="text-xl font-semibold">
                         Total Price: <span className="text-black font-bold">${totalPrice.toFixed(2)}</span>
                     </div>
-                    <button className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded">
-                        Pay
-                    </button>
+                    <Link to={'/dashboard/payment'}>
+                        <button
+                            disabled={!cart.length} className="bg-yellow-600 hover:bg-yellow-700 text-white px-6 font-bold    py-2 rounded disabled:bg-gray-400   ">
+                            Pay
+                        </button>
+                    </Link>
                 </div>
 
                 {/* Table */}
