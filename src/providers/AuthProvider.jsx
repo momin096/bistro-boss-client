@@ -46,7 +46,7 @@ const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, currentUser => {
             setUser(currentUser);
             console.log(currentUser);
-            setLoading(false);
+
             if (currentUser) {
                 // get token and store in local storage
                 axiosPublic.post('/jwt', { email: currentUser.email })
@@ -54,6 +54,7 @@ const AuthProvider = ({ children }) => {
                         console.log('token -> ', res.data.token);
                         if (res.data.token) {
                             localStorage.setItem('access-token', res.data.token);
+                            setLoading(false);
                         }
                     })
                     .catch(error => {
@@ -63,6 +64,7 @@ const AuthProvider = ({ children }) => {
             } else {
                 // remove token from local storage
                 localStorage.removeItem('access-token');
+                setLoading(false);
             }
         });
 

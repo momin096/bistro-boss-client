@@ -5,12 +5,14 @@ import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useCart from "../../../hooks/useCart";
+import useAdmin from "../../../hooks/useAdmin";
 
 const NavBar = () => {
   const { user, logOut } = useAuth();
 
 
   const [cart] = useCart();
+  const [isAdmin] = useAdmin();
 
 
   // useEffect(() => {
@@ -37,10 +39,16 @@ const NavBar = () => {
         </NavLink>
       </li>
       <li><NavLink to="/contact" style={({ isActive }) => ({ color: isActive ? 'yellow' : 'white' })}>CONTACT US</NavLink></li>
-      <li><NavLink to="/dashboard" style={({ isActive }) => ({ color: isActive ? 'yellow' : 'white' })}>DASHBOARD</NavLink></li>
       <li><NavLink to="/menu" style={({ isActive }) => ({ color: isActive ? 'yellow' : 'white' })}>OUR MENU</NavLink></li>
       <li><NavLink to="/order/salad" style={({ isActive }) => ({ color: isActive ? 'yellow' : 'white' })}>ORDER FOOD</NavLink></li>
-      <li><NavLink to="/secret" style={({ isActive }) => ({ color: isActive ? 'yellow' : 'white' })}>SECRET</NavLink></li>
+      <li>
+        {
+          user && isAdmin && <NavLink to="/dashboard/admin-home" >DASHBOARD</NavLink>
+        }
+        {
+          user && !isAdmin && <NavLink to="/dashboard/user-home" >DASHBOARD</NavLink>
+        }
+      </li>
     </>
   );
 

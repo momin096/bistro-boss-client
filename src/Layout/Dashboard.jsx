@@ -84,11 +84,11 @@ const Dashboard = () => {
                                     </NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to={'/dashboard/reservation'} className={({ isActive }) =>
+                                    <NavLink to={'/dashboard/history'} className={({ isActive }) =>
                                         `flex gap-2 items-center     ${isActive ? 'text-white' : 'text-black'}`
                                     }>
                                         <SlCalender className={'text-xl'} />
-                                        reservation
+                                        Payment History
                                     </NavLink>
                                 </li>
                                 <li>
@@ -108,11 +108,11 @@ const Dashboard = () => {
                                     </NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to={'/dashboard/my-bookings'} className={({ isActive }) =>
+                                    <NavLink to={'/dashboard/payment-history'} className={({ isActive }) =>
                                         `flex gap-2 items-center     ${isActive ? 'text-white' : 'text-black'}`
                                     }>
                                         <BsCalendar2Heart className='text-xl' />
-                                        my booking
+                                        payment history
                                     </NavLink>
                                 </li>
                             </>
@@ -131,7 +131,7 @@ const Dashboard = () => {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={'/dashboard/user-home'} className={({ isActive }) =>
+                        <NavLink to={'/menu'} className={({ isActive }) =>
                             `flex gap-2 items-center  ${isActive ? 'text-white' : 'text-black'}`
                         }>
                             <GiHamburgerMenu className="text-xl" />
@@ -139,7 +139,7 @@ const Dashboard = () => {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={'/dashboard/user-home'} className={({ isActive }) =>
+                        <NavLink to={'/order/salad'} className={({ isActive }) =>
                             `flex gap-2 items-center  ${isActive ? 'text-white' : 'text-black'}`
                         }>
                             <HiMiniShoppingBag className="text-xl" />
@@ -147,7 +147,7 @@ const Dashboard = () => {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={'/dashboard/user-home'} className={({ isActive }) =>
+                        <NavLink to={'/'} className={({ isActive }) =>
                             `flex gap-2 items-center  ${isActive ? 'text-white' : 'text-black'}`
                         }>
                             <IoMdMailUnread className="text-xl" />
