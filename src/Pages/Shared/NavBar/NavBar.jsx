@@ -2,8 +2,6 @@ import { FaOpencart, FaRegUserCircle, FaShoppingCart, FaUserCircle } from "react
 import { Link, NavLink } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useCart from "../../../hooks/useCart";
 import useAdmin from "../../../hooks/useAdmin";
 
@@ -14,11 +12,6 @@ const NavBar = () => {
   const [cart] = useCart();
   const [isAdmin] = useAdmin();
 
-
-  // useEffect(() => {
-
-
-  // }, [])
 
   const handleLogOut = () => {
     logOut()
